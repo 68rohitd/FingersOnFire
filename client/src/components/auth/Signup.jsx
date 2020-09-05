@@ -102,8 +102,11 @@ class Signup extends Component {
 
           if (!token) {
             return (
-              <div className="row m-0">
-                <div className="col-12 col-sm-12 col-md-4">
+              <div
+                className="row m-0"
+                style={{ "justify-content": "space-evenly" }}
+              >
+                <div className="col-md-4">
                   <div className="container">
                     <form
                       className="signUpForm "
@@ -187,7 +190,6 @@ class Signup extends Component {
                               onChange={this.onChange}
                             />
                           </div>
-                          {/* <div className="col-1 correctContainer"></div> */}
                         </div>
 
                         <div className="row">
@@ -203,7 +205,6 @@ class Signup extends Component {
                     </form>
                   </div>
                 </div>
-                <div className="col-1"></div>
               </div>
             );
           } else {

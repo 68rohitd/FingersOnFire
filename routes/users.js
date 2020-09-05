@@ -45,6 +45,7 @@ router.post("/register", async (req, res) => {
       displayName,
       highestGrossWpm: 0,
       highestNetWpm: 0,
+      progress: [],
     });
     const savedUser = await newUser.save();
     res.json(savedUser);
@@ -82,6 +83,7 @@ router.post("/login", async (req, res) => {
         email: user.email,
         userHighestGrossWpm: user.highestGrossWpm,
         userHighestNetWpm: user.highestNetWpm,
+        progress: user.progress,
       },
     });
   } catch (err) {
@@ -116,7 +118,35 @@ router.get("/", auth, async (req, res) => {
     email: user.email,
     userHighestGrossWpm: user.highestGrossWpm,
     userHighestNetWpm: user.highestNetWpm,
+    progress: user.progress,
   });
+});
+
+// #desc: update progress of user
+router.put("/updateProgress/", async (req, res) => {
+  try {
+    const userId = req.body.userId;
+    const progress = req.body.progress;
+
+    const existingUser = await User.findByIdAndUpdate(
+      userId,
+      { progress },
+      { new: true }
+    );
+
+    const userToSend = {
+      id: userId,
+      displayName: existingUser.displayName,
+      userHighestNetWpm: existingUser.highestNetWpm,
+      email: existingUser.email,
+      userId: existingUser.userId,
+      progress: existingUser.progress,
+    };
+
+    res.json(userToSend);
+  } catch (err) {
+    res.status(500).json({ err: err.messsage });
+  }
 });
 
 // @desc: delete a user account

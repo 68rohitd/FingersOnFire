@@ -67,8 +67,11 @@ class Login extends Component {
 
           if (!token) {
             return (
-              <div className="row m-0">
-                <div className="col-12 col-sm-12 col-md-4">
+              <div
+                className="row m-0"
+                style={{ "justify-content": "space-evenly" }}
+              >
+                <div className="col-md-4">
                   <div className="container">
                     <form
                       className="loginForm "
@@ -106,7 +109,6 @@ class Login extends Component {
                     </form>
                   </div>
                 </div>
-                <div className="col-1"></div>
               </div>
             );
           } else {

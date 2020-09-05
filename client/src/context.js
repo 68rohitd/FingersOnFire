@@ -32,6 +32,12 @@ const reducer = (state, action) => {
         user: action.payload.user,
       };
 
+    case "UPDATE_PROGRESS":
+      return {
+        ...state,
+        user: action.payload.user,
+      };
+
     default:
       return state;
   }
@@ -79,11 +85,6 @@ export class Provider extends Component {
       console.log("ERROR: ", err);
     }
 
-    // // get leaderboard
-    // const leaderboard = await axios.get("/leaderboard/getData");
-
-    // this.setState({ leaderboard: leaderboard.data });
-
     // check if logged in
     let token = localStorage.getItem("auth-token");
     if (token === null) {
@@ -100,7 +101,7 @@ export class Provider extends Component {
         const userRes = await axios.get("/users", {
           headers: { "x-auth-token": token },
         });
-
+        console.log(userRes.data);
         this.setState({
           token,
           user: userRes.data,

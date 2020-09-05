@@ -17,7 +17,7 @@ export default class App extends Component {
     return (
       <Provider>
         <Router>
-          <Header branding="Fingers On Fire"></Header>
+          <Header branding="Fingers.on.Fire"></Header>
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/about" component={About} />

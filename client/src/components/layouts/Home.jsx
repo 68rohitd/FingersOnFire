@@ -46,7 +46,9 @@ export default class home extends Component {
   onRefresh = async (dispatch) => {
     clearInterval(this.myInterval);
     this.myInterval = null;
-    toast.notify("Getting new poem...");
+    toast.notify("Getting new poem...", {
+      position: "top-right",
+    });
     this.setState({
       userText: "",
       entireUserText: "",
@@ -115,7 +117,9 @@ export default class home extends Component {
 
     // new personal  record! so update user and leaderboard table, but only if hes logged in
     if (netWpm > userHighestNetWpm && userId !== undefined) {
-      toast.notify("New Personal Record!");
+      toast.notify("New Personal Record!", {
+        position: "top-right",
+      });
       const obj = {
         netWpm,
         name: user.displayName,
@@ -129,6 +133,30 @@ export default class home extends Component {
         payload: {
           leaderboard: res.data,
           user: {
+            id: res.data.userId,
+            progress: res.data.progress,
+            displayName: res.data.displayName,
+            email: res.data.email,
+            userHighestNetWpm: res.data.userHighestNetWpm,
+          },
+        },
+      });
+    }
+    if (userId !== undefined) {
+      let progress = [...user.progress, netWpm];
+      const obj = {
+        progress,
+        userId,
+      };
+
+      const res = await Axios.put(`/users/updateProgress/`, obj);
+
+      dispatch({
+        type: "UPDATE_PROGRESS",
+        payload: {
+          user: {
+            id: res.data.userId,
+            progress: res.data.progress,
             displayName: res.data.displayName,
             email: res.data.email,
             userHighestNetWpm: res.data.userHighestNetWpm,
@@ -145,7 +173,9 @@ export default class home extends Component {
       this.setState({ timeElapsed: this.state.timeElapsed + 1 });
     }, 1000);
 
-    toast.notify("Timer started!");
+    toast.notify("Timer started!", {
+      position: "top-right",
+    });
   };
 
   onReset = () => {

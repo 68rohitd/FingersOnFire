@@ -9,7 +9,7 @@ export default class About extends Component {
             <h1 style={{ fontWeight: "lighter mt-5" }}>
               <span className="font-italic">About</span>{" "}
               <span style={{ fontFamily: "Pacifico, cursive" }}>
-                Fingers On Fire
+                Fingers.on.Fire
               </span>
             </h1>
             <p className="lead font-italic">
@@ -18,6 +18,7 @@ export default class About extends Component {
             <h1 className="font-italic">Features</h1>
             <p className="mb-1 font-italic">Login/Register feature</p>
             <p className="mb-1 font-italic">Leaderboard</p>
+            <p className="mb-1 font-italic">graph of your past activities</p>
             <p className="mb-1 font-italic">More features to come sooooon!</p>
             <p className="text-secondary font-italic mt-5">Version 1.0.0</p>
             <p className="text-secondary font-italic ">

@@ -22,26 +22,6 @@ class Header extends Component {
     });
   };
 
-  OnDeleteAccount = async (dispatch) => {
-    const token = localStorage.getItem("auth-token");
-    const userId = localStorage.getItem("userId");
-
-    try {
-      await axios.delete(`/users/delete/${userId}`, {
-        headers: { "x-auth-token": token },
-      });
-
-      localStorage.setItem("auth-token", "");
-      localStorage.setItem("userId", "");
-
-      dispatch({
-        type: "LOGGED_OUT",
-      });
-    } catch (err) {
-      console.log(err.response.data);
-    }
-  };
-
   render() {
     const { branding } = this.props;
 
@@ -120,22 +100,6 @@ class Header extends Component {
                             Logout
                           </span>
                         </li>
-                        {/* delete account */}
-                        <li className="nav-item ">
-                          <span
-                            onClick={() =>
-                              this.setState({
-                                deleteAccount: false,
-                              })
-                            }
-                            className="nav-link mb-2 text-light"
-                            style={{ cursor: "pointer", fontSize: 16 }}
-                            data-toggle="modal"
-                            data-target="#staticBackdrop"
-                          >
-                            {user.displayName}
-                          </span>
-                        </li>
                       </>
                     ) : (
                       // signup or sign in
@@ -170,98 +134,21 @@ class Header extends Component {
                       </Link>
                     </li>
 
-                    <li>
-                      <Link
-                        to="/profile"
-                        className="nav-link text-light"
-                        style={{ cursor: "pointer", fontSize: 16 }}
-                      >
-                        Profile
-                      </Link>
-                    </li>
+                    {localToken ? (
+                      <li>
+                        <Link
+                          to="/profile"
+                          className="nav-link text-light"
+                          style={{ cursor: "pointer", fontSize: 16 }}
+                        >
+                          Profile (
+                          {user.displayName ? user.displayName : ". . ."})
+                        </Link>
+                      </li>
+                    ) : null}
                   </div>
                 </div>
               </nav>
-
-              {/* modal */}
-              <div
-                className="modal fade"
-                id="staticBackdrop"
-                data-backdrop="static"
-                data-keyboard="false"
-                tabIndex="-1"
-                role="dialog"
-                aria-labelledby="staticBackdropLabel"
-                aria-hidden="true"
-              >
-                <div className="modal-dialog">
-                  <div className="modal-content">
-                    <div className="modal-header">
-                      <h5 className="modal-title" id="staticBackdropLabel">
-                        Account Info
-                      </h5>
-                      <button
-                        type="button"
-                        className="close"
-                        data-dismiss="modal"
-                        aria-label="Close"
-                      >
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div className="modal-body">
-                      <p className="mb-0">Name: {user.displayName}</p>
-                      <p className="mb-0">Net WPM: {user.userHighestNetWpm}</p>
-                      <p
-                        onClick={() =>
-                          this.setState({
-                            deleteAccount: !this.state.deleteAccount,
-                          })
-                        }
-                      >
-                        <span
-                          className="text-secondary"
-                          style={{
-                            textDecoration: "underline",
-                            cursor: "pointer",
-                          }}
-                        >
-                          Delete my account
-                        </span>
-                      </p>
-                      {this.state.deleteAccount ? (
-                        <>
-                          <p className="text-secondary">
-                            Are you sure? There's no going back!
-                          </p>
-                          <button
-                            onClick={this.OnDeleteAccount.bind(this, dispatch)}
-                            type="button"
-                            className="btn btn-danger"
-                            data-dismiss="modal"
-                          >
-                            Delete my account
-                          </button>
-                        </>
-                      ) : null}
-                    </div>
-                    <div className="modal-footer">
-                      <button
-                        onClick={() =>
-                          this.setState({
-                            deleteAccount: false,
-                          })
-                        }
-                        type="button"
-                        className="btn btn-primary"
-                        data-dismiss="modal"
-                      >
-                        Close
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </>
           );
         }}

@@ -8,6 +8,7 @@ const userSchema = new Schema({
   displayName: { type: String, required: true },
   highestGrossWpm: { type: Number },
   highestNetWpm: { type: Number },
+  progress: { type: Array },
 });
 
 const User = mongoose.model("User", userSchema);
