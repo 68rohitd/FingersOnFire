@@ -19,6 +19,7 @@ export default class home extends Component {
       netWpm: 0,
       index: 0,
       wrong: 0,
+      wrongChar: 0,
     };
 
     this.myInterval = null;
@@ -57,6 +58,7 @@ export default class home extends Component {
       grossWpm: 0,
       netWpm: 0,
       wrong: 0,
+      wrongChar: 0,
       index: 0,
     });
     this.myInterval = null;
@@ -74,9 +76,13 @@ export default class home extends Component {
   onChange = (user, sampleText, dispatch, e) => {
     let len = this.state.entireUserText.length;
     const grossWpm = Math.floor(len / 5 / (this.state.timeElapsed / 60));
-    let netWpm = Math.floor(
-      grossWpm - this.state.wrong / (this.state.timeElapsed / 60)
-    );
+
+    let timeTaken = this.state.timeElapsed / 60;
+    let chars = this.state.entireUserText.length;
+    let wrong = this.state.wrongChar;
+    let raw = chars / timeTaken / 5;
+    let errorRate = wrong / timeTaken;
+    const netWpm = Math.floor(raw - errorRate);
 
     this.setState(
       {
@@ -107,10 +113,14 @@ export default class home extends Component {
     const len = sampleText.length;
     const grossWpm = Math.floor(len / 5 / (time / 60));
 
-    // Net WPM = Gross - ((uncorrected errors)/min)
-    const netWpm = Math.floor(grossWpm - this.state.wrong / (time / 60));
+    let timeTaken = time / 60;
+    let chars = sampleText.length;
+    let wrong = this.state.wrongChar;
+    let raw = chars / timeTaken / 5;
+    let errorRate = wrong / timeTaken;
+    const netWpm = Math.floor(raw - errorRate);
 
-    this.setState({ grossWpm, netWpm });
+    this.setState({ grossWpm, netWpm: netWpm < 0 ? 0 : netWpm });
 
     const { userHighestNetWpm } = user;
     const userId = localStorage.getItem("userId");
@@ -142,7 +152,7 @@ export default class home extends Component {
         },
       });
     }
-    if (userId !== undefined) {
+    if (userId) {
       let progress = [...user.progress, netWpm];
       const obj = {
         progress,
@@ -191,6 +201,7 @@ export default class home extends Component {
       completed: false,
       index: 0,
       wrong: 0,
+      wrongChar: 0,
     });
   };
 
@@ -204,6 +215,10 @@ export default class home extends Component {
       if (
         this.state.userText.trim() !== sampleText.split(" ")[this.state.index]
       ) {
+        let wrongChar = 0;
+        let ut = this.state.userText.trim();
+        let st = sampleText.split(" ")[this.state.index];
+        for (let i = 0; i < st.length; i++) if (ut[i] !== st[i]) wrongChar++;
         this.setState(
           {
             entireUserText:
@@ -211,6 +226,7 @@ export default class home extends Component {
             userText: "",
             index: this.state.index + 1,
             wrong: this.state.wrong + 1,
+            wrongChar: this.state.wrongChar + wrongChar,
           },
           () => {
             if (this.state.index === sampleText.split(" ").length)

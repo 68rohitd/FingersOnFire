@@ -69,7 +69,7 @@ class Login extends Component {
             return (
               <div
                 className="row m-0"
-                style={{ "justify-content": "space-evenly" }}
+                style={{ justifyContent: "space-evenly" }}
               >
                 <div className="col-md-4">
                   <div className="container">

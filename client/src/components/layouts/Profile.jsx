@@ -46,7 +46,7 @@ export default class Profile extends Component {
           datasets[0].data = userRes.data.progress;
 
           this.setState({
-            labels: userRes.data.progress,
+            labels: userRes.data.progress.map((item, i) => i + 1),
             datasets,
           });
         }

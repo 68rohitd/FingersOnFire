@@ -104,7 +104,7 @@ class Signup extends Component {
             return (
               <div
                 className="row m-0"
-                style={{ "justify-content": "space-evenly" }}
+                style={{ justifyContent: "space-evenly" }}
               >
                 <div className="col-md-4">
                   <div className="container">
@@ -186,8 +186,9 @@ class Signup extends Component {
                               name="displayName"
                               type="text"
                               className="form-control mb-3"
-                              placeholder="Display name (optional)"
+                              placeholder="Display name"
                               onChange={this.onChange}
+                              required
                             />
                           </div>
                         </div>
