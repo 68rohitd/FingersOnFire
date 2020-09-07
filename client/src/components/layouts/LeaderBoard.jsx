@@ -13,10 +13,16 @@ export default class LeaderBoard extends Component {
   }
 
   onRefresh = async () => {
-    // get leaderboard
-    const leaderboard = await Axios.get("/leaderboard/getData");
+    this.setState({ leaderboard: [] });
 
-    this.setState({ leaderboard: leaderboard.data });
+    try {
+      // get leaderboard
+      const leaderboard = await Axios.get("/leaderboard/getData");
+
+      this.setState({ leaderboard: leaderboard.data });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   async componentDidMount() {
@@ -39,45 +45,53 @@ export default class LeaderBoard extends Component {
 
           return (
             <div className="container mt-5 ">
-              <div className="row">
-                <div className="col-1">
-                  <i
-                    className="fa fa-refresh"
-                    style={{ cursor: "pointer", fontSize: "20px" }}
-                    onClick={this.onRefresh}
-                  ></i>
-                </div>
-                <div className="col">
-                  <div className="table-responsive">
-                    <table className="table table-hover table-dark">
-                      <thead>
-                        <tr>
-                          <th scope="col">#</th>
-                          <th scope="col">Name</th>
-                          <th scope="col">WPM</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {leaderboard.map((entry, i) => {
-                          return (
-                            <tr
-                              className={classNames({
-                                "table-success font-weight-bold":
-                                  userId === entry.userId,
-                                "text-dark": userId === entry.userId,
-                              })}
-                              key={i}
-                            >
-                              <th scope="row">{i + 1}</th>
-                              <td>{entry.name.toUpperCase()}</td>
-                              <td>{entry.highestNetWpm}</td>
+              <div className="row" style={{ justifyContent: "center" }}>
+                {leaderboard.length ? (
+                  <>
+                    <div className="col-1">
+                      <i
+                        className="fa fa-refresh"
+                        style={{ cursor: "pointer", fontSize: "20px" }}
+                        onClick={this.onRefresh}
+                      ></i>
+                    </div>
+                    <div className="col">
+                      <div className="table-responsive">
+                        <table className="table table-hover table-dark">
+                          <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Name</th>
+                              <th scope="col">WPM</th>
                             </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
+                          </thead>
+                          <tbody>
+                            {leaderboard.map((entry, i) => {
+                              return (
+                                <tr
+                                  className={classNames({
+                                    "table-success font-weight-bold":
+                                      userId === entry.userId,
+                                    "text-dark": userId === entry.userId,
+                                  })}
+                                  key={i}
+                                >
+                                  <th scope="row">{i + 1}</th>
+                                  <td>{entry.name.toUpperCase()}</td>
+                                  <td>{entry.highestNetWpm}</td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <span className="text-secondary">
+                    Fetching the Leaderboard...
+                  </span>
+                )}
               </div>
             </div>
           );

@@ -60,10 +60,10 @@ export class Provider extends Component {
   getData = async () => {
     try {
       const poem = await Axios.get(
-        "https://poetrydb.org/author,title/Shakespeare;Sonnet"
+        "https://poetrydb.org/author/Thomas%20Moore"
       );
 
-      const num = Math.floor(Math.random() * 150 + 1);
+      const num = Math.floor(Math.random() * 29 + 1);
 
       let text = poem.data[num].lines;
       let final = "";

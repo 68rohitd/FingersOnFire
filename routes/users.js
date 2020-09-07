@@ -126,7 +126,9 @@ router.get("/", auth, async (req, res) => {
 router.put("/updateProgress/", async (req, res) => {
   try {
     const userId = req.body.userId;
-    const progress = req.body.progress;
+    let progress = req.body.progress;
+
+    if (progress.length > 28) progress.shift();
 
     const existingUser = await User.findByIdAndUpdate(
       userId,

@@ -28,10 +28,10 @@ export default class home extends Component {
   getData = async () => {
     try {
       const poem = await Axios.get(
-        "https://poetrydb.org/author,title/Shakespeare;Sonnet"
+        "https://poetrydb.org/author/Thomas%20Moore"
       );
 
-      const num = Math.floor(Math.random() * 150 + 1);
+      const num = Math.floor(Math.random() * 29 + 1);
 
       let text = poem.data[num].lines;
       let final = "";
@@ -40,16 +40,25 @@ export default class home extends Component {
 
       return final;
     } catch (err) {
-      console.log("no internet dude");
+      console.log(err);
     }
   };
 
   onRefresh = async (dispatch) => {
+    dispatch({
+      type: "REFRESH",
+      payload: {
+        sampleText: "",
+      },
+    });
+
     clearInterval(this.myInterval);
     this.myInterval = null;
+
     toast.notify("Getting new poem...", {
       position: "top-right",
     });
+
     this.setState({
       userText: "",
       entireUserText: "",
@@ -273,25 +282,29 @@ export default class home extends Component {
 
           return (
             <div className="container">
-              <div className="row">
+              <div className="row" style={{ justifyContent: "center" }}>
                 <div className="sampleText m-5">
                   <h2>
-                    {sampleText.split(" ").map((word, i) => (
-                      <span
-                        className={classNames({
-                          currentWord: index === i,
-                          "text-success":
-                            entireUserText.split(" ")[i] ===
-                              sampleText.split(" ")[i] && i < index,
-                          "text-danger":
-                            entireUserText.split(" ")[i] !==
-                              sampleText.split(" ")[i] && i < index,
-                        })}
-                        key={i}
-                      >
-                        {word}{" "}
-                      </span>
-                    ))}
+                    {sampleText ? (
+                      sampleText.split(" ").map((word, i) => (
+                        <span
+                          className={classNames({
+                            currentWord: index === i,
+                            "text-success":
+                              entireUserText.split(" ")[i] ===
+                                sampleText.split(" ")[i] && i < index,
+                            "text-danger":
+                              entireUserText.split(" ")[i] !==
+                                sampleText.split(" ")[i] && i < index,
+                          })}
+                          key={i}
+                        >
+                          {word}{" "}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-secondary">loading...</span>
+                    )}
                   </h2>
                 </div>
               </div>
